@@ -1,0 +1,275 @@
+{
+  "theme": {
+    "primary": "#0F766E"
+  },
+  "shared": {
+    "education_stage": "小学",
+    "grade": "五年级",
+    "subject": "数学",
+    "duration": 45,
+    "curriculum_standard": "《义务教育数学课程标准（2022年版）》",
+    "standard_basis": "探索并掌握三角形面积计算方法，发展几何直观和推理意识。",
+    "textbook": "教材版本与单元位置待教师核对",
+    "t1": {
+      "teacher": "核心任务：通过转化解释公式来源。",
+      "student": "画图或写话说明：怎样把三角形转化成会计算面积的图形？三角形面积为什么要除以2？"
+    },
+    "t2": {
+      "teacher": "共同应用任务，检查底和对应高。",
+      "student": "一个三角形的底是 8 cm，对应的高是 6 cm。求面积，并标出你使用的底和高。"
+    },
+    "exit_ticket": {
+      "teacher": "独立检测，不提供同伴帮助。",
+      "student": "三角形标志牌的底是 12 cm，高是 7 cm。求面积，并用一句话解释公式中的除以2。"
+    },
+    "vocabulary": {
+      "type": "table",
+      "rows": [
+        ["底", "计算时选择的边"],
+        ["对应的高", "从对角顶点到这条底边的垂直线段"],
+        ["转化", "把新图形变成已经会研究的图形"]
+      ]
+    },
+    "anchor_activity": {
+      "type": "callout",
+      "kind": "student-task",
+      "label": "完成后继续",
+      "text": "画出两个形状不同、面积都是 24 平方厘米的三角形，标出底和高。"
+    },
+    "reflect_prompt": "今天哪一种图或解释最能说明“除以2”？为什么？"
+  },
+  "documents": [
+    {
+      "id": "teacher_plan",
+      "audience": "teacher",
+      "eyebrow": "小学五年级 · 数学 · 差异化教学",
+      "title": "三角形的面积：差异化教学方案",
+      "sections": [
+        {
+          "heading": "课程依据与共同目标",
+          "blocks": [
+            {
+              "type": "callout",
+              "kind": "special",
+              "label": "课程依据",
+              "text": "《义务教育数学课程标准（2022年版）》：探索并掌握三角形面积计算方法，发展几何直观和推理意识。教材位置待核对。"
+            },
+            {
+              "type": "paragraph",
+              "text": "三组共同解释公式来源、正确匹配底和高，并独立解决新情境问题。分组为本课暂定路径，不是固定能力等级。"
+            }
+          ]
+        },
+        {
+          "heading": "分组依据与设计",
+          "blocks": [
+            {
+              "type": "labeled",
+              "label": "依据",
+              "text": "未提供前测数据，暂按表征与解释所需支持强度设计；任务1后根据学生作品调整。"
+            },
+            {
+              "type": "table",
+              "headers": ["项目", "Group A", "Group B", "Group C"],
+              "rows": [
+                ["学习入口", "补全转化图并解释倍数关系", "独立画图或文字解释", "比较两种转化并评价"],
+                ["教师追问", "拼成的图形含几个原三角形？", "底和高怎样对应？", "两种推导的共同结构是什么？"],
+                ["任务", "T1（拼图框架）、T2、检测、早完成、反思", "T1、T2、检测、早完成、反思", "T1、T2、进一步思考、检测、早完成、反思"]
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "课中检查与换组",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "任务1后收看图示：能独立说明“两个全等三角形拼成一个平行四边形”的学生继续 B/C 路径；仍把三角形直接看作平行四边形的学生使用 A 组拼图框架并接受5分钟小组指导。"
+            },
+            {
+              "type": "from_shared",
+              "key": "exit_ticket"
+            },
+            {
+              "type": "cards",
+              "items": [
+                {"title": "达到目标", "text": "计算正确，并能解释除以2和底高对应。"},
+                {"title": "接近目标", "text": "计算正确，但解释或标注有一处不完整。"},
+                {"title": "需要再教学", "text": "仍直接底乘高，或无法选择对应高。"}
+              ]
+            }
+          ]
+        },
+        {
+          "heading": "为什么这样设计",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "A 组保留同一核心任务，用视觉框架外化转化过程，随后撤除支架。C 组不是增加题量，而是比较推导并概括共同结构。"
+            },
+            {
+              "type": "paragraph",
+              "text": "三组使用相同任务顺序和共同检测，适合大班共同讲解、分组工作和统一收束。"
+            }
+          ]
+        },
+        {
+          "heading": "共同早完成任务",
+          "blocks": [
+            {"type": "from_shared", "key": "anchor_activity"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "worksheet_group_a",
+      "audience": "student",
+      "eyebrow": "小学五年级 · 数学",
+      "title": "Group A · 三角形的面积",
+      "sections": [
+        {
+          "heading": "概念工具",
+          "blocks": [
+            {"type": "from_shared", "key": "vocabulary"}
+          ]
+        },
+        {
+          "heading": "探究与应用",
+          "blocks": [
+            {
+              "type": "h3",
+              "text": "先画出拼成后的图形"
+            },
+            {
+              "type": "paragraph",
+              "text": "在图中标出平行四边形的底和高，再数一数它包含几个同样的三角形。"
+            },
+            {"type": "from_shared", "key": "t1", "label": "1"},
+            {"type": "workspace", "size": "large"},
+            {"type": "from_shared", "key": "t2", "label": "2"},
+            {"type": "workspace", "size": "med"}
+          ]
+        },
+        {
+          "heading": "课堂检测",
+          "blocks": [
+            {"type": "from_shared", "key": "exit_ticket"},
+            {"type": "workspace", "size": "med"}
+          ]
+        },
+        {
+          "heading": "完成后继续",
+          "blocks": [
+            {"type": "from_shared", "key": "anchor_activity"},
+            {"type": "workspace", "size": "med"}
+          ]
+        },
+        {
+          "heading": "回顾",
+          "blocks": [
+            {"type": "from_shared", "key": "reflect_prompt"},
+            {"type": "workspace", "size": "small"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "worksheet_group_b",
+      "audience": "student",
+      "eyebrow": "小学五年级 · 数学",
+      "title": "Group B · 三角形的面积",
+      "sections": [
+        {
+          "heading": "概念工具",
+          "blocks": [
+            {"type": "from_shared", "key": "vocabulary"}
+          ]
+        },
+        {
+          "heading": "探究与应用",
+          "blocks": [
+            {"type": "from_shared", "key": "t1", "label": "1"},
+            {"type": "workspace", "size": "large"},
+            {"type": "from_shared", "key": "t2", "label": "2"},
+            {"type": "workspace", "size": "med"}
+          ]
+        },
+        {
+          "heading": "课堂检测",
+          "blocks": [
+            {"type": "from_shared", "key": "exit_ticket"},
+            {"type": "workspace", "size": "med"}
+          ]
+        },
+        {
+          "heading": "完成后继续",
+          "blocks": [
+            {"type": "from_shared", "key": "anchor_activity"},
+            {"type": "workspace", "size": "med"}
+          ]
+        },
+        {
+          "heading": "回顾",
+          "blocks": [
+            {"type": "from_shared", "key": "reflect_prompt"},
+            {"type": "workspace", "size": "small"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "worksheet_group_c",
+      "audience": "student",
+      "eyebrow": "小学五年级 · 数学",
+      "title": "Group C · 三角形的面积",
+      "sections": [
+        {
+          "heading": "概念工具",
+          "blocks": [
+            {"type": "from_shared", "key": "vocabulary"}
+          ]
+        },
+        {
+          "heading": "探究与应用",
+          "blocks": [
+            {"type": "from_shared", "key": "t1", "label": "1"},
+            {"type": "workspace", "size": "large"},
+            {"type": "from_shared", "key": "t2", "label": "2"},
+            {"type": "workspace", "size": "med"}
+          ]
+        },
+        {
+          "heading": "进一步思考",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "比较“两个全等三角形拼成平行四边形”和“把三角形补成长方形”两种推导。它们为什么都会得到底×高÷2？"
+            },
+            {"type": "workspace", "size": "large"}
+          ]
+        },
+        {
+          "heading": "课堂检测",
+          "blocks": [
+            {"type": "from_shared", "key": "exit_ticket"},
+            {"type": "workspace", "size": "med"}
+          ]
+        },
+        {
+          "heading": "完成后继续",
+          "blocks": [
+            {"type": "from_shared", "key": "anchor_activity"},
+            {"type": "workspace", "size": "med"}
+          ]
+        },
+        {
+          "heading": "回顾",
+          "blocks": [
+            {"type": "from_shared", "key": "reflect_prompt"},
+            {"type": "workspace", "size": "small"}
+          ]
+        }
+      ]
+    }
+  ]
+}
