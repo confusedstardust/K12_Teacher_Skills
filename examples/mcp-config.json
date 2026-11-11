@@ -4,9 +4,11 @@
       "command": "uvx",
       "args": [
         "--from",
-        "C:/Users/Eden/Desktop/teacher skill/K12_Teacher_Skills",
+        "git+https://github.com/confusedstardust/K12_Teacher_Skills.git",
         "k12-teacher-mcp"
-      ]
+      ],
+      "disabled": false,
+      "disabledTools": []
     }
   }
 }
