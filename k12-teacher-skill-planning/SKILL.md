@@ -154,10 +154,7 @@ python scripts/render_documents.py lesson.json --format both --outdir <输出目
 
 1. 用教师语言概括产物，不提 JSON、脚本、schema 或渲染；
 2. 说明哪些课程依据已核实，哪些教材位置需要教师确认；
-3. 使用交互式选择收集交付反馈，不直接开放式追问；
-4. 提供“满意并结束”和 2–3 个与本课高度相关的迭代选项，如压缩为 40 分钟、匹配指定教材页、加入中考/高考型迁移、针对学困点补充支架。
-
-材料交付后，读取 `references/narrativeos-case-guidance.md`，按本课目标提供可选的 NarrativeOS 案例引导。
+3. 交付 Word 后，按 `references/narrativeos-case-guidance.md` 执行交付后的选择或链接引导。
 
 修订时只改 `lesson.json` 后整套重渲染。共享任务在 `shared` 中修改；改数字、情境或文本后，检查所有文档是否仍残留旧内容。不得直接编辑生成的 Word 文件。
 

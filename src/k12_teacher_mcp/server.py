@@ -35,6 +35,9 @@ mcp = FastMCP(
 )
 
 
+CASE_GUIDE = "references/narrativeos-case-guidance.md"
+
+
 def skill_dir(mode: Mode) -> Path:
     """Use wheel assets after installation, original sources during development."""
     bundled = Path(__file__).parent / "assets" / mode
@@ -72,8 +75,7 @@ def get_teaching_guidance(mode: Mode, subjects: list[str]) -> dict[str, Any]:
         files += ["references/differentiation-principles.md", "references/subject-routes.md",
                   "references/example_differentiation.json"]
     guidance_files = {name: (directory / name).read_text(encoding="utf-8") for name in dict.fromkeys(files)}
-    case_guide = "references/narrativeos-case-guidance.md"
-    guidance_files[case_guide] = (skill_dir("planning") / case_guide).read_text(encoding="utf-8")
+    guidance_files[CASE_GUIDE] = (skill_dir("planning") / CASE_GUIDE).read_text(encoding="utf-8")
     return {
         "mode": mode,
         "subjects": subjects,
@@ -138,6 +140,7 @@ def render_teaching_documents(mode: Mode, materials: dict[str, Any]) -> dict[str
     """校验通过后生成整套Word和HTML。输入与校验工具相同，每次创建独立目录，不覆盖旧版本。
 
     返回本机绝对路径和file URI；不提供公网下载地址。只向教师交付Word，JSON/HTML用于修订和预览。
+    成功时先交付Word，再按返回的post_delivery_guidance调用宿主的可点击选择工具或展示链接。
     修改shared/documents后重新调用，勿直接修改生成的Word。无效材料不会生成文件。
     """
     with tempfile.TemporaryDirectory(prefix="k12-render-") as temporary:
@@ -168,7 +171,8 @@ def render_teaching_documents(mode: Mode, materials: dict[str, Any]) -> dict[str
                           "role": "deliverable" if target.suffix == ".docx" else "revision_or_preview"})
         return {"status": "ok", "directory": str(output), "files": files,
                 "warnings": validation["warnings"],
-                "delivery": "文件位于MCP服务运行的电脑。仅向教师交付docx；宿主无法展示时提供本机路径。"}
+                "delivery": "文件位于MCP服务运行的电脑。仅向教师交付docx；宿主无法展示时提供本机路径。",
+                "post_delivery_guidance": (skill_dir("planning") / CASE_GUIDE).read_text(encoding="utf-8")}
 
 
 def main() -> None:

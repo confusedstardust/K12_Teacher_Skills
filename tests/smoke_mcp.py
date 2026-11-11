@@ -54,6 +54,8 @@ async def check():
                     assert validation["valid"], validation
                     rendered = data(await session.call_tool("render_teaching_documents", args))
                     assert rendered["status"] == "ok", rendered
+                    assert rendered["post_delivery_guidance"] == current_guidance
+                    assert "去资源广场看看" in current_guidance and "完成本次备课" in current_guidance
                     outputs.append(rendered["directory"])
                     assert len(rendered["files"]) == 1 + 2 * len(materials["documents"])
                     for entry in rendered["files"]:
@@ -71,6 +73,7 @@ async def check():
                     rejected = data(await session.call_tool("render_teaching_documents",
                                       {"mode": mode, "materials": invalid}))
                     assert rejected["status"] == "validation_failed" and rejected["files"] == []
+                    assert "post_delivery_guidance" not in rejected
                     assert set(Path(temporary).iterdir()) == before
                 assert len(set(outputs)) == 3
                 # Shared reference drift must be rejected, not silently rendered.
