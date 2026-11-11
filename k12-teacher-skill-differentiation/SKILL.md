@@ -110,6 +110,8 @@ description: 面向中国大陆小学、初中和普通高中课堂，把教师�
 
 先运行结构验证：
 
+若校验失败，按报错路径（数组下标从 0 开始）和修复提示修改当前材料，再运行同一校验。保留原课例的共同任务和分层目标。只有修复确实缺少教师信息时才追问，校验通过后再渲染。
+
 ```bash
 python scripts/validate_material_source.py differentiation.json --mode differentiation
 ```
@@ -127,6 +129,8 @@ python scripts/render_documents.py differentiation.json --format both --outdir <
 ```
 
 确认四个 ID 均有 `.docx` 与 `.html`。
+
+若渲染提示 Python 或 `python-docx` 不可用，保留当前 `differentiation.json`，按提示在实际渲染环境修复依赖后重试。已有 HTML 时可明确标注为预览，说明 Word 尚未生成。
 
 ## 7. 交付与修订
 

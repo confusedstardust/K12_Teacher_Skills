@@ -52,6 +52,41 @@ async def check():
                     args = {"mode": mode, "materials": materials}
                     validation = data(await session.call_tool("validate_teaching_materials", args))
                     assert validation["valid"], validation
+                    malformed = copy.deepcopy(materials)
+                    malformed["documents"].append(7)
+                    report = data(await session.call_tool("validate_teaching_materials",
+                                  {"mode": mode, "materials": malformed}))
+                    assert not report["valid"]
+                    assert any(issue["code"] == "INVALID_DOCUMENT"
+                               and issue["path"] == f"documents[{len(materials['documents'])}]"
+                               and issue["fix_hint"] for issue in report["diagnostics"]), report
+                    if mode == "planning":
+                        materials["shared"]["duration"] += 5
+                        report = data(await session.call_tool("validate_teaching_materials", args))
+                        assert not report["valid"]
+                        assert any(issue["code"] == "DURATION_MISMATCH"
+                                   and issue["path"] == "shared.duration"
+                                   for issue in report["diagnostics"]), report
+                        materials["shared"]["duration"] -= 5
+                    else:
+                        broken = copy.deepcopy(materials)
+                        group = next(doc for doc in broken["documents"] if doc["id"] == "worksheet_group_a")
+
+                        def remove_reference(value):
+                            if isinstance(value, list):
+                                value[:] = [item for item in value if item != {"type": "from_shared", "key": "exit_ticket"}]
+                                for item in value:
+                                    remove_reference(item)
+                            elif isinstance(value, dict):
+                                for item in value.values():
+                                    remove_reference(item)
+
+                        remove_reference(group)
+                        report = data(await session.call_tool("validate_teaching_materials",
+                                      {"mode": mode, "materials": broken}))
+                        assert not report["valid"]
+                        assert any(issue["code"] == "MISSING_COMMON_REFERENCE"
+                                   and "exit_ticket" in issue["fix_hint"] for issue in report["diagnostics"]), report
                     rendered = data(await session.call_tool("render_teaching_documents", args))
                     assert rendered["status"] == "ok", rendered
                     assert rendered["post_delivery_guidance"] == current_guidance
@@ -82,6 +117,10 @@ async def check():
                 rejected = data(await session.call_tool("validate_teaching_materials",
                                   {"mode": "planning", "materials": materials}))
                 assert not rejected["valid"]
+                assert any(issue["code"] == "MISSING_SHARED_REFERENCE"
+                           and issue["path"].startswith("documents[0].sections[0].blocks[")
+                           and issue["path"].endswith("].key")
+                           and "missing_task" in issue["message"] for issue in rejected["diagnostics"]), rejected
                 for arguments in ({"mode": "unknown", "subjects": ["数学"]},
                                   {"mode": "planning", "subjects": ["../../secret"]}):
                     result = await session.call_tool("get_teaching_guidance", arguments)

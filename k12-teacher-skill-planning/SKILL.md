@@ -130,6 +130,8 @@ description: 为中国大陆小学、初中和普通高中教师创建符合国�
 
 先运行结构验证：
 
+若校验失败，按报错路径（数组下标从 0 开始）和修复提示修改当前材料，再运行同一校验。保留已有教学设计。只有修复确实缺少教师信息时才追问，校验通过后再渲染。
+
 ```bash
 python scripts/validate_material_source.py lesson.json --mode planning
 ```
@@ -147,6 +149,8 @@ python scripts/render_documents.py lesson.json --format both --outdir <输出目
 ```
 
 检查每个 `documents[].id` 都生成 `.docx` 与 `.html`，且文件非空。只向教师交付 Word 文档；HTML 和 JSON 留作预览与后续修订。
+
+若渲染提示 Python 或 `python-docx` 不可用，保留当前 `lesson.json`，按提示在实际渲染环境修复依赖后重试。已有 HTML 时可明确标注为预览，说明 Word 尚未生成。
 
 ## 6. 交付与修订
 

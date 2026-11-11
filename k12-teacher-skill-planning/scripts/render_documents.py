@@ -39,6 +39,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import shlex
 import sys
 from pathlib import Path
 
@@ -71,6 +72,28 @@ def main() -> int:
     if not docs:
         print("error: no `documents` array in input", file=sys.stderr)
         return 1
+
+    render_docx = None
+    if args.format in ("docx", "both"):
+        try:
+            from docx import Document  # noqa: F401 — check the active Python environment
+        except (ImportError, OSError) as exc:
+            install_args = ["-m", "pip", "install", "--force-reinstall", "python-docx==1.1.2"]
+            if sys.platform == "win32":
+                executable = sys.executable.replace("'", "''")
+                command = f"& '{executable}' " + " ".join(install_args)
+            else:
+                command = shlex.join([sys.executable, *install_args])
+            print("error [WORD_DEPENDENCY_UNAVAILABLE]: 当前 Python 无法加载 python-docx，未生成 Word。",
+                  file=sys.stderr)
+            print(f"原因：{exc}\n修复：在运行渲染脚本的同一 Python 环境安装或修复 python-docx。\n{command}\n"
+                  "保留原材料 JSON，修复后重试原命令。如需先看预览，可用 --format html。",
+                  file=sys.stderr)
+            return 3
+        from render_lesson_docx import render as render_docx
+
+    from render_lesson_html import render as render_html
+
     outdir = Path(args.outdir)
     outdir.mkdir(parents=True, exist_ok=True)
 
@@ -86,12 +109,10 @@ def main() -> int:
         # The HTML twin always ships — docx is the teacher deliverable, html is its
         # always-available preview. Rendering docx alone leaves the twin missing, so
         # "docx" implies both.
-        from render_lesson_html import render as render_html
         path = outdir / f"{doc_id}.html"
         path.write_text(render_html(full), encoding="utf-8")
         written.append(str(path))
-        if args.format in ("docx", "both"):
-            from render_lesson_docx import render as render_docx
+        if render_docx is not None:
             path = outdir / f"{doc_id}.docx"
             render_docx(full, str(path))
             written.append(str(path))

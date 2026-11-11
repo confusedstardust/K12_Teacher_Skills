@@ -102,17 +102,22 @@ def run_script(mode: Mode, name: str, arguments: list[str]) -> subprocess.Comple
 
 
 def check_source(source: Path, mode: Mode) -> dict[str, Any]:
-    result = run_script(mode, "validate_material_source.py", [str(source), "--mode", mode])
-    errors, warnings = [], []
-    for line in result.stderr.splitlines():
-        if line.startswith("warning: "):
-            warnings.append(line.removeprefix("warning: "))
-        elif line.startswith("error: "):
-            errors.append(line.removeprefix("error: "))
-    if result.returncode and not errors:
-        errors.append("材料结构无法处理，请检查shared、documents及各文档字段类型。")
-    return {"valid": result.returncode == 0, "errors": errors, "warnings": warnings,
-            "scope": "结构、共享引用及脚本已有规则检查；不证明课标真实性或教学质量。"}
+    result = run_script(mode, "validate_material_source.py", [str(source), "--mode", mode, "--json"])
+    try:
+        report = json.loads(result.stdout)
+    except json.JSONDecodeError:
+        issue = {
+            "severity": "error",
+            "code": "VALIDATOR_FAILED",
+            "path": "$",
+            "message": "校验程序未能返回诊断结果。",
+            "fix_hint": "保留当前材料，确认安装包包含最新校验脚本后重试。",
+        }
+        report = {"valid": False, "errors": [issue["message"]], "warnings": [], "diagnostics": [issue]}
+    return {
+        **report,
+        "scope": "结构、共享引用及脚本已有规则检查；不证明课标真实性或教学质量。",
+    }
 
 
 def write_source(path: Path, materials: dict[str, Any]) -> None:
@@ -124,9 +129,9 @@ def write_source(path: Path, materials: dict[str, Any]) -> None:
 
 @mcp.tool(annotations={"readOnlyHint": True, "openWorldHint": False})
 def validate_teaching_materials(mode: Mode, materials: dict[str, Any]) -> dict[str, Any]:
-    """校验教学材料对象（顶层shared和documents数组）。返回valid/errors/warnings。
+    """校验教学材料对象（顶层shared和documents数组）。返回valid/errors/warnings和diagnostics。
 
-    必须先用get_teaching_guidance获取schema；错误修正后再生成Word。不会调用模型或联网。
+    按diagnostics的path和fix_hint修正同一份材料，再次校验通过后生成Word。
     """
     with tempfile.TemporaryDirectory(prefix="k12-validate-") as temporary:
         source = Path(temporary) / "materials.json"
@@ -152,6 +157,19 @@ def render_teaching_documents(mode: Mode, materials: dict[str, Any]) -> dict[str
             return {"status": "validation_failed", **validation, "files": []}
         result = run_script(mode, "render_documents.py",
                             [str(source), "--format", "both", "--outdir", str(staging)])
+        if result.returncode == 3 and "WORD_DEPENDENCY_UNAVAILABLE" in result.stderr:
+            return {
+                "status": "word_dependency_unavailable",
+                "files": [],
+                "diagnostics": [{
+                    "severity": "error",
+                    "code": "WORD_DEPENDENCY_UNAVAILABLE",
+                    "path": "$",
+                    "message": "MCP 服务的 Python 环境无法加载 python-docx，未生成 Word。",
+                    "fix_hint": "保留本次 materials 参数。修复或重新安装 MCP 服务的依赖后，"
+                                "用同一份材料重新调用渲染工具。",
+                }],
+            }
         if result.returncode:
             raise ValueError("文档渲染失败，请检查block类型和字段是否符合document-schema。详情："
                              + result.stderr[-2000:])
