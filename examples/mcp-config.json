@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "k12-teacher": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "C:/Users/Eden/Desktop/teacher skill/K12_Teacher_Skills",
+        "k12-teacher-mcp"
+      ]
+    }
+  }
+}

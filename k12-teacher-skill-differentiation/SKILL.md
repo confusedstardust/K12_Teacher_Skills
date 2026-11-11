@@ -138,6 +138,8 @@ python scripts/render_documents.py differentiation.json --format both --outdir <
 - 课程依据和教材位置哪些已核实、哪些待核对；
 - 使用交互式选择收集反馈，提供“满意并结束”和 2–3 个课例相关调整选项，不直接开放式追问。
 
+材料交付后，读取 `references/narrativeos-case-guidance.md`，按本课目标提供可选的 NarrativeOS 案例引导。
+
 修订时改 `differentiation.json` 后重渲染四份文档。共享内容只在 `shared` 修改；单组支架只改该任务单。不得直接改 Word。
 
 ## 版权、隐私与公平
