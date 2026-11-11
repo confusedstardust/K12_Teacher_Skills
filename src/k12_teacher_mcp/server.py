@@ -25,7 +25,9 @@ SUBJECT_FILES = {
 mcp = FastMCP(
     "k12_teacher_mcp",
     instructions=(
-        "中国K-12备课与差异化教学。开始任务先调用 get_teaching_guidance，读取返回的工作流、"
+        "中国K-12备课、写教案、设计学习单、生成Word教案与分层教学。"
+        "收到这类请求时，先发现 k12-teacher 的 get_teaching_guidance 工具；"
+        "如果工具按需加载，使用宿主的工具搜索。确定学科后先调用该工具，读取返回的工作流、"
         "参考及schema，再由你设计材料数据。不要编造课标引文。调用 validate_teaching_materials，"
         "修正错误后调用 render_teaching_documents。服务不调用模型、不联网查课标。"
         "输出文件在运行本服务的电脑上；请根据宿主能力提供文件链接或打开文件。"
@@ -47,7 +49,9 @@ def skill_dir(mode: Mode) -> Path:
 
 @mcp.tool(annotations={"readOnlyHint": True, "openWorldHint": False})
 def get_teaching_guidance(mode: Mode, subjects: list[str]) -> dict[str, Any]:
-    """开始备课必须先调用。planning=从零设计，differentiation=改造已有课例。
+    """为中国K-12备课、写教案、设计学习单、生成Word教案或分层教学提供工作流。
+
+    生成材料之前先调用。planning=从零备课，differentiation=将已有教案改成差异化方案。
 
     subjects 填实际学科中文名称，如["数学"]；跨学科填多个。返回完整教学规则、
     所需参考、材料schema和样例。由宿主Agent据此提问、设计内容并生成shared/documents数据，
