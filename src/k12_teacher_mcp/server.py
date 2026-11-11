@@ -171,7 +171,10 @@ def render_teaching_documents(mode: Mode, materials: dict[str, Any]) -> dict[str
                           "role": "deliverable" if target.suffix == ".docx" else "revision_or_preview"})
         return {"status": "ok", "directory": str(output), "files": files,
                 "warnings": validation["warnings"],
-                "delivery": "文件位于MCP服务运行的电脑。仅向教师交付docx；宿主无法展示时提供本机路径。",
+                "delivery": (
+                    "先交付Word附件或本机文件链接。若有present_files，先调用它；成功后继续按"
+                    "post_delivery_guidance调用宿主的可点击选择工具，再发送最终回复。"
+                ),
                 "post_delivery_guidance": (skill_dir("planning") / CASE_GUIDE).read_text(encoding="utf-8")}
 
 
